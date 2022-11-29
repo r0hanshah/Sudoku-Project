@@ -23,15 +23,26 @@ text = font.render('quit' , True , color)
 background = pygame.image.load("menubackground.jpeg")
 
 class Button:
-    def __init__(self, x_cord, y_cord, image):
+    def __init__(self, x_cord, y_cord, image, text_input):
         self.image = image
-        self.rect = image.get_rect()
+        self.x_cord = x_cord
+        self.y_cord = y_cord
+        self.text_input = text_input
+        self.text = pygame.font.Font("OptimusPrinceps.ttf", 40).render(self.text_input, True, "white")
+        if image == None:
+            self.image = self.text
+        self.rect = self.image.get_rect()
         self.rect.topleft = (x_cord,y_cord)
-    #draws button on screen
-    def draw(self):
+        
+        self.text_rect = self.text.get_rect(center=(self.x_cord, self.y_cord))
+    #draws image on button on screen (might need to run display through this idk)
+    def draw_image(self):
         display.blit(self.image, (self.rect.x, self.rect.y))
 
-
+    #draws text on button on screen (hope this works)
+    def draw_text(self):
+        #display.blit(self.text, (self.rect.x, self.rect.y))
+        display.blit(self.text, self.text_rect) #^ this might do the same thing
 
 # Run the program
 def main():
@@ -51,6 +62,8 @@ def main():
         #Menu Title "sudoku"
         suduko_text = font.render(f'Sudoku:', True, 'white')
         display.blit(suduko_text, (200, 150))
+        button = Button(100, 100, None, "Kid Named Finger")
+        button.draw_text()
         pygame.display.update()
         
         
@@ -67,3 +80,4 @@ hard   50 '''
 
 if __name__ == '__main__':
     main()
+

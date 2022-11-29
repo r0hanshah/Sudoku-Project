@@ -24,8 +24,6 @@ class SudokuGenerator:
       self.board = [["0" for i in range(self.row_length)]
                          for j in range(self.row_length)]
     
-
-
     '''
 	Returns a 2D python list of numbers that represents the board
 
@@ -58,7 +56,10 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-      pass
+        if num in self.board[row-1]:
+            return False
+        return True
+
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -70,8 +71,13 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
+    #KAYLEE BRIGGS DID THIS AND IT MIGHT NOT WORK, NEED TO TRY
     def valid_in_col(self, col, num):
-        pass
+        for i in range(0, 9):
+            if num in self.board[i][col]:
+                return False 
+            else: 
+                return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -86,7 +92,11 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
-        pass
+        for i in range(3):
+            for j in range(3):
+                if self.board[i + row_start][j + col_start] == num:
+                    return False
+        return True
     
     '''
     Determines if it is valid to enter num at (row, col) in the board
@@ -98,8 +108,11 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
+    #THERE IS SOMETHING WRONG HERE, NEED TO FIND OUT HOW TO GET ROW START AND COL START VALUES, WHY ARE FUNCTIONS UNDEFINED?
     def is_valid(self, row, col, num):
-        pass
+        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(self.row_start, self.col_start, num):
+            return True
+
 
     '''
     Fills the specified 3x3 box with values
@@ -112,7 +125,9 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_box(self, row_start, col_start):
-        pass
+        for i in range(3):
+            for j in range(3):
+                self.board[i + row_start][j + col_start] = random.randint(1, 9)
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -122,7 +137,8 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        pass
+        for i in range(0, self.row_length, self.box_length):
+            self.fill_box(i, i)
 
     '''
     DO NOT CHANGE
@@ -238,8 +254,11 @@ class Cell:
     #Otherwise, no value is displayed in the cell.  
     #The cell is outlined red if it is currently selected. 
 
-'''Board (Recommended) 
-This class represents an entire Sudoku board. A Board object has 81 Cell objects.'''
+    '''
+Board (Recommended) 
+This class represents an entire Sudoku board. A Board object has 81 Cell objects.
+    
+    '''
 class Board:
   def __init__(self, width, height, screen, difficulty):  
   #Constructor for the Board class.  
@@ -265,32 +284,32 @@ class Board:
   ##Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  values  and  sketched  value  that  are filled by themselves.  
     pass
    
-  def sketch(self, value)  
+  def sketch(self, value):
   #Sets the sketched value of the current selected cell equal to user entered value.  
   #It will be displayed at the top left corner of the cell using the draw() function. 
-  pass
+    pass
    
-  def place_number(self, value)  
+  def place_number(self, value):
   #Sets the value of the current selected cell equal to user entered value.  
   #Called when the user presses the Enter key.  
-  pass
+    pass
    
-  def reset_to_original(self)  
+  def reset_to_original(self):
   #Reset all cells in the board to their original values (0 if cleared, otherwise the corresponding digit). 
-  pass
+    pass
    
-  def is_full(self)  
+  def is_full(self):
     #Returns a Boolean value indicating whether the board is full or not.  
    pass
 
-  def update_board(self)  
+  def update_board(self):
     #Updates the underlying 2D board with the values in all cells. 
     pass
    
-  def find_empty(self)  
+  def find_empty(self):
     #Finds an empty cell and returns its row and col as a tuple (x, y).  
-  pass
+    pass
    
-  def check_board(self)  
+  def check_board(self):  
     #Check whether the Sudoku board is solved correctly. 
     pass 

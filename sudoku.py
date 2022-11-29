@@ -14,7 +14,7 @@ width = 600
 display = pygame.display.set_mode((width,height))
 
 # Create caption with font
-pygame.display.set_caption("Suduko")
+pygame.display.set_caption("Sudoku")
 font = pygame.font.Font('OptimusPrinceps.ttf',55) 
 
 text = font.render('quit' , True , color) 
@@ -48,8 +48,8 @@ def main():
         
         # Updates window with new background
         pygame.display.update() 
-        #Menu Title "suduko"
-        suduko_text = font.render(f'Suduko:', True, 'white')
+        #Menu Title "sudoku"
+        suduko_text = font.render(f'Sudoku:', True, 'white')
         display.blit(suduko_text, (200, 150))
         pygame.display.update()
         

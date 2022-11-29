@@ -238,21 +238,27 @@ This class represents a single cell in the Sudoku board. There are 81 Cells in a
 class Cell:
   def __init__(self, value, row, col, screen):  
     #Constructor for the Cell class   
-    pass
+    self.value = value
+    self.row = row
+    self.col = col
+    self.screen = screen
+    
   
   def set_cell_value(self, value):
     #Setter for this cell’s value  
-    pass
+    self.value = value
   
   def set_sketched_value(self, value):  
     #Setter for this cell’s sketched value  
-    pass
+    self
   
-  def draw(self):  
-    #Draws this cell, along with the value inside it.  
-    #If this cell has a nonzero value, that value is displayed.    
-    #Otherwise, no value is displayed in the cell.  
-    #The cell is outlined red if it is currently selected. 
+#Draws this cell, along with the value inside it.  
+#If this cell has a nonzero value, that value is displayed.    
+#Otherwise, no value is displayed in the cell.  
+#The cell is outlined red if it is currently selected. 
+  def draw(self):
+    pass
+
 
     '''
 Board (Recommended) 

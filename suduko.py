@@ -15,7 +15,7 @@ display = pygame.display.set_mode((width,height))
 
 # Create caption with font
 pygame.display.set_caption("Suduko")
-font = pygame.font.SysFont('OptimusPrinceps.ttf',35) 
+font = pygame.font.Font('OptimusPrinceps.ttf',55) 
 
 text = font.render('quit' , True , color) 
 
@@ -43,12 +43,18 @@ def main():
         #menu = text.get
         mouse = pygame.mouse.get_pos() 
         
-        # Set background
-        display.blit(background, (0, 0))
+        # Set background potential
+        #display.blit(background, (0, 0))
         
         # Updates window with new background
         pygame.display.update() 
-
+        #Menu Title "suduko"
+        suduko_text = font.render(f'Suduko:', True, 'white')
+        display.blit(suduko_text, (200, 150))
+        pygame.display.update()
+        
+        
+        
 '''Create a Sudoku Board 
 Difficulty  Number of empty cells  
 easy   30  

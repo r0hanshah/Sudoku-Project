@@ -152,17 +152,13 @@ def main():
         #menu = text.get
         
         
-        # Set background potential
-        #display.blit(background, (0, 0))
+        
         
         # Updates window with new background
         pygame.display.update() 
-        #Menu Title "sudoku"
-        #display.blit(suduko_text, (200, 150))
+        #
 
-        
-        #if button.draw_text(display):
-            #INSERT WHAT PRESSING EASY BUTTON DOES
+    
             #display.fill("black")
             #pygame.display.update()
         start_menu(display)

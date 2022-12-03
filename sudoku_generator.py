@@ -1,5 +1,9 @@
 import math,random
-import pygame 
+import pygame
+import sys
+
+HEIGHT = 800
+WIDTH = 600
 
 class SudokuGenerator:
     '''
@@ -18,9 +22,11 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-      self.row_length = row_length
-      self.removed_cells = removed_cells 
-      self.box_length = math.sqrt(self.row_length)
+    #   I added the int(), might break something later on -dylan
+      self.row_length = int(row_length)
+      self.removed_cells = removed_cells
+    #   Here too -dylan
+      self.box_length = int(math.sqrt(self.row_length))
       self.board = [["0" for i in range(self.row_length)]
                          for j in range(self.row_length)]
     
@@ -41,9 +47,10 @@ class SudokuGenerator:
 	Return: None
     '''
     def print_board(self):
-        for i in self.board:
-          i = " ".join(i)
-          print(i)
+        for i, row in enumerate(self.board):
+            for j, col in enumerate(row):
+                print(self.board [i][j], end = " ")
+            print()
 
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -74,10 +81,9 @@ class SudokuGenerator:
     #KAYLEE BRIGGS DID THIS AND IT MIGHT NOT WORK, NEED TO TRY
     def valid_in_col(self, col, num):
         for i in range(0, 9):
-            if num in self.board[i][col]:
-                return False 
-            else: 
-                return True
+            if num == int(self.board[i][col]):
+                return False       
+        return True
 
     '''
 	Determines if num is contained in the 3x3 box specified on the board
@@ -94,8 +100,11 @@ class SudokuGenerator:
     def valid_in_box(self, row_start, col_start, num):
         for i in range(3):
             for j in range(3):
-                if self.board[i + row_start][j + col_start] == num:
-                    return False
+                try:
+                    if self.board[i + row_start][j + col_start] == num:
+                        return False
+                except:
+                    continue
         return True
     
     '''
@@ -110,7 +119,7 @@ class SudokuGenerator:
     '''
     #THERE IS SOMETHING WRONG HERE, NEED TO FIND OUT HOW TO GET ROW START AND COL START VALUES, WHY ARE FUNCTIONS UNDEFINED?
     def is_valid(self, row, col, num):
-        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(self.row_start, self.col_start, num):
+        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(row, col, num):
             return True
 
 
@@ -127,7 +136,9 @@ class SudokuGenerator:
     def fill_box(self, row_start, col_start):
         for i in range(3):
             for j in range(3):
-                self.board[i + row_start][j + col_start] = random.randint(1, 9)
+                shit = random.randint(1, 9)
+                self.board[i + row_start][j + col_start] = shit
+        self.print_board()
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -137,7 +148,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def fill_diagonal(self):
-        for i in range(0, self.row_length, self.box_length):
+        for i in range(0, int(self.row_length), int(self.box_length)):
             self.fill_box(i, i)
 
     '''
@@ -181,8 +192,7 @@ class SudokuGenerator:
 
     '''
     DO NOT CHANGE
-    Provided for students
-    Constructs a solution by calling fill_diagonal and fill_remaining
+    Provided for students fill_diagonal and fill_remaining
 
 	Parameters: None
 	Return: None
@@ -204,6 +214,7 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
+        # TODO
         pass
 
 '''
@@ -229,6 +240,7 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
+#print(generate_sudoku(9, 30))
 
 sudoku = SudokuGenerator(9,0)
 #print(print_board(sudoku.get_board()))
@@ -242,6 +254,7 @@ class Cell:
     self.row = row
     self.col = col
     self.screen = screen
+    self.selected = False
     
   
   def set_cell_value(self, value):
@@ -249,16 +262,27 @@ class Cell:
     self.value = value
   
   def set_sketched_value(self, value):  
-    #Setter for this cell’s sketched value  
-    self
+    #Setter for this cell’s sketched value
+    self.value = value  
   
 #Draws this cell, along with the value inside it.  
 #If this cell has a nonzero value, that value is displayed.    
 #Otherwise, no value is displayed in the cell.  
 #The cell is outlined red if it is currently selected. 
-  def draw(self):
-    pass
-
+def draw(self):
+    text_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
+    if self.value != 0:
+        text = text_font.render(str(self.value), True, (0,0,0))
+        self.screen.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+    if self.selected:
+        pygame.draw.rect(self.screen, (255,0,0), (self.col * 50, self.row * 50, 50, 50), 3)
+    else:
+        pygame.draw.rect(self.screen, (0,0,0), (self.col * 50, self.row * 50, 50, 50), 3)
+        # text = font.render(str(self.value), True, BLACK)
+        # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
+    #else:
+        #pygame.draw.rect(self.screen, BLACK, (self.col * CELL_WIDTH, self.row * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT), 1)
+        
 
     '''
 Board (Recommended) 
@@ -266,17 +290,112 @@ This class represents an entire Sudoku board. A Board object has 81 Cell objects
     
     '''
 class Board:
-  def __init__(self, width, height, screen, difficulty):  
+  def __init__(self, width, height, display, difficulty):  
   #Constructor for the Board class.  
   #screen is a window from PyGame.  
   #difficulty is a variable to indicate if the user chose easy, medium, or hard.  
-    pass
+    self.width = width
+    self.height = height
+    self.display = display
+    self.difficulty = difficulty
+    
    
-  def draw(self):
+  def draw(self,display):
   #Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.  
-  #Draws every cell on this board.  
-    pass
-   
+  #Draws every cell on this board. 
+  # 
+  # FROM TICTACTOE
+    #this is the bold 3x3
+    # draw horizontal lines
+    for i in range(0, 4):
+        pygame.draw.line(
+            display,
+            'white',
+            (0, i * 200),
+            (WIDTH, i * 200),
+            9
+        )
+    # draw vertical lines 
+    for j in range(0, 4):
+        pygame.draw.line(
+            display,
+            "white",
+            (j * 200, 0),
+            (j * 200, 599.4),
+            9
+            #line(surface, color, start_pos, end_pos, width=1) -> Rect
+        )
+    #this is the 9x9
+    # draw horizontal lines
+    for i in range(1, 10):
+        pygame.draw.line(
+            display,
+            'white',
+            (0, i * 66.6),
+            (WIDTH, i * 66.6),
+            1
+        )
+    # draw vertical lines
+    for j in range(1, 10):
+        pygame.draw.line(
+            display,
+            'white',
+            (j * 66.6, 0),
+            (j * 66.6, 599.4),
+            1
+            )
+            
+     # Initialize buttons
+    # Initialize text first
+    button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
+    reset_text = button_font.render("Reset", 0, "white")
+    restart_text = button_font.render("Restart", 0, "white")
+    exit_text = button_font.render("Exit", 0, "white")
+
+ # Initialize button background color and text
+    reset_surface = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
+    reset_surface.fill("black")
+    reset_surface.blit(reset_text, (10, 10))
+    
+    restart_surface = pygame.Surface((restart_text.get_size()[0]+ 20, restart_text.get_size()[1]+20))
+    restart_surface.fill("black")
+    restart_surface.blit(restart_text, (10, 10))
+
+    exit_surface = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
+    exit_surface.fill("black")
+    exit_surface.blit(exit_text, (10, 10))
+
+    # Initialize button rectangle, positioning 
+    reset_rectangle = reset_surface.get_rect(
+        center=(99.9, 700)
+    )
+    restart_rectangle = restart_surface.get_rect(
+        center = (299.7, 710)
+    )
+    exit_rectangle = exit_surface.get_rect(
+        center = (499.5, 700)
+    )
+
+    # Draw buttons
+    display.blit(restart_text, restart_rectangle)
+    display.blit(reset_surface, reset_rectangle)
+    display.blit(exit_surface, exit_rectangle)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if reset_rectangle.collidepoint(event.pos):
+                    # Checks if mouse is on start button
+                    return  # If the mouse is on the reset button, we can return to main
+                elif exit_rectangle.collidepoint(event.pos):
+                    # If the mouse is on the exit button, exit the program
+                    sys.exit()
+        pygame.display.update()
+    
+
+
   def select(self, row, col): 
   #Marks the cell at (row, col) in the board as the current selected cell.  
   #Once a cell has been selected, the user can edit its value or sketched value.  
@@ -284,10 +403,14 @@ class Board:
    
   def click(self, x, y):  
   #If a tuple of (x, y) coordinates is within the displayed board, this function returns a tuple of the (row, col) of the cell which was clicked. Otherwise, this function returns None.  
-    pass
+    if x < 0 or x > self.width or y < 0 or y > self.height:
+        return None
+    row = y // 50
+    col = x // 50
+    return (row, col)
    
   def clear(self):  
-  ##Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  values  and  sketched  value  that  are filled by themselves.  
+  #Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  values  and  sketched  value  that  are filled by themselves.  
     pass
    
   def sketch(self, value):
@@ -298,7 +421,10 @@ class Board:
   def place_number(self, value):
   #Sets the value of the current selected cell equal to user entered value.  
   #Called when the user presses the Enter key.  
-    pass
+    self.board[row][col] = value
+    self.board[row][col].draw(self.display)
+    
+    
    
   def reset_to_original(self):
   #Reset all cells in the board to their original values (0 if cleared, otherwise the corresponding digit). 
@@ -306,7 +432,11 @@ class Board:
    
   def is_full(self):
     #Returns a Boolean value indicating whether the board is full or not.  
-   pass
+    for i in range(9):
+        for j in range(9):
+            if self.board[i][j] == 0:
+                return False
+
 
   def update_board(self):
     #Updates the underlying 2D board with the values in all cells. 

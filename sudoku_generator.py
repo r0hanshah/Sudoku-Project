@@ -46,6 +46,7 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
+    # works
     def print_board(self):
         for i, row in enumerate(self.board):
             for j, col in enumerate(row):
@@ -62,6 +63,7 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
+    # likely working -dylan
     def valid_in_row(self, row, num):
         if num in self.board[row-1]:
             return False
@@ -78,7 +80,7 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    #KAYLEE BRIGGS DID THIS AND IT MIGHT NOT WORK, NEED TO TRY
+    #likely working -dylan
     def valid_in_col(self, col, num):
         for i in range(0, 9):
             if num == int(self.board[i][col]):
@@ -117,7 +119,7 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    #THERE IS SOMETHING WRONG HERE, NEED TO FIND OUT HOW TO GET ROW START AND COL START VALUES, WHY ARE FUNCTIONS UNDEFINED?
+    #  likely working -dylan
     def is_valid(self, row, col, num):
         if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(row, col, num):
             return True
@@ -147,6 +149,7 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
+    # this likely generates invalid boxes, look at again -dylan
     def fill_diagonal(self):
         for i in range(0, int(self.row_length), int(self.box_length)):
             self.fill_box(i, i)

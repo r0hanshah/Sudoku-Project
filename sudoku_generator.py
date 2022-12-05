@@ -6,6 +6,7 @@ import copy
 HEIGHT = 800
 WIDTH = 600
 
+# FINISHED 
 class SudokuGenerator:
     '''
     create a sudoku board - initialize class variables and set up the 2D board
@@ -29,7 +30,6 @@ class SudokuGenerator:
         self.box_length = int(math.sqrt(self.row_length))
         self.board = [["0" for i in range(self.row_length)]
                          for j in range(self.row_length)]
-        self.solution_board = copy.deepcopy(self.board)
                          
     
     '''
@@ -41,8 +41,6 @@ class SudokuGenerator:
     def get_board(self):
         return self.board
 
-    def get_solution_board(self):
-        return self.solution_board
     '''
 	Displays the board to the console
     This is not strictly required, but it may be useful for debugging purposes
@@ -54,12 +52,6 @@ class SudokuGenerator:
         for i, row in enumerate(self.board):
             for j,col in enumerate(row):
                 print(self.board [i][j], end = " ")
-            print()
-        
-    def print_solution_board(self):
-        for i, row in enumerate(self.solution_board):
-            for j,col in enumerate(row):
-                print(self.solution_board [i][j], end = " ")
             print()
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
@@ -235,26 +227,13 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        self.solution_board = copy.deepcopy(self.board)
-        
-        if Board.difficulty == 0:
-            amount_to_remove = 30
-        elif Board.difficulty == 1:
-            amount_to_remove = 40
-        elif Board.difficulty == 2:
-            amount_to_remove = 50
-        while amount_to_remove > 0:
+        while self.removed_cells > 0:
             row = random.randint(0, 8)
             col = random.randint(0, 8)
             if self.board[row][col] != 0:
                 self.board[row][col] = 0
-                amount_to_remove -= 1
+                self.removed_cells -= 1
         
-    
-    # this is temporary for debugging
-    def set_difficulty(self, difficulty):
-        Board.difficulty = difficulty
-
 
 '''
 DO NOT CHANGE
@@ -271,6 +250,7 @@ removed is the number of cells to clear (set to 0)
 
 Return: list[list] (a 2D Python list to represent the board)
 '''
+# stupid function:
 def generate_sudoku(size, removed):
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
@@ -279,53 +259,62 @@ def generate_sudoku(size, removed):
     board = sudoku.get_board()
     return board
 
-#print(generate_sudoku(9, 30))
-
-
-#print(print_board(sudoku.get_board()))
 
 '''Cell (Recommended)  
 This class represents a single cell in the Sudoku board. There are 81 Cells in a Board.'''
 class Cell:
-  def __init__(self, value, row, col, screen):  
-    #Constructor for the Cell class   
-    self.value = value
-    self.row = row
-    self.col = col
-    self.screen = screen
-    self.selected = False
+    def __init__(self, value, row, col, display):  
+        #Constructor for the Cell class   
+        self.value = value
+        self.row = row
+        self.col = col
+        self.display = display
+        self.selected = False
+        self.sketched_value = 0 
+       
     
   
-  def set_cell_value(self, value):
+    def set_cell_value(self, value):
     #Setter for this cell’s value  
-    self.value = value
+        self.value = value
   
-  def set_sketched_value(self, sketched_value):  
+    def set_sketched_value(self, sketched_value):  
     #Setter for this cell’s sketched value
-    self.sketched_value = sketched_value  
+        self.sketched_value = sketched_value  
   
 #Draws this cell, along with the value inside it.  
 #If this cell has a nonzero value, that value is displayed.    
 #Otherwise, no value is displayed in the cell.  
 #The cell is outlined red if it is currently selected. 
 
-def draw(self):
-    text_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
-    if self.value != 0:
-        text = text_font.render(str(self.value), True, (0,0,0))
-        self.screen.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
-    if self.selected:
-        pygame.draw.rect(self.screen, (255,0,0), (self.col * 50, self.row * 50, 50, 50), 3)
-    else:
-        pygame.draw.rect(self.screen, (0,0,0), (self.col * 50, self.row * 50, 50, 50), 3)
-        # text = font.render(str(self.value), True, BLACK)
-        # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
-    #else:
-        #pygame.draw.rect(self.screen, BLACK, (self.col * CELL_WIDTH, self.row * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT), 1)
-        ''''''
-        
-        # Get the set of keys pressed and check for user input
-        pressed_keys = pygame.key.get_pressed()
+    def draw(self):
+        if self.selected:
+            pygame.draw.rect(self.display, ("red"), (self.col * 100, self.row * 100, 100, 100), 3)
+        else: #GRID
+            # pygame.draw.rect(self.display, ("white"), (self.col * 75, self.row * 65, 65, 65), 1)
+            
+            rectangle = pygame.Rect(self.col * 50, self.row * 50, 50, 50)
+            pygame.draw.rect(self.display, ("white"), rectangle,  2)
+           
+            
+        if self.value != 0:
+            #NUMBERS ON SCREEN
+            font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
+            text = font.render(str(self.value), True, ("white"))
+            self.display.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+        if self.sketched_value != 0:
+            font = pygame.font.SysFont('OptimusPrinceps.ttf', 15)
+            text = font.render(str(self.sketched_value), True, ("white"))
+            self.display.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+            
+            # text = font.render(str(self.value), True, BLACK)
+            # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
+        #else:
+            #pygame.draw.rect(self.screen, BLACK, (self.col * CELL_WIDTH, self.row * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT), 1)
+            ''''''
+            
+            # Get the set of keys pressed and check for user input
+            pressed_keys = pygame.key.get_pressed()
         '''
         # Insert corresponding value based on user keypresses
             if pressed_keys[K_1]:
@@ -359,13 +348,13 @@ def draw(self):
                 #what happens if they dont press a value 1-9?
         '''
 
-    '''
+    '''    
 Board (Recommended) 
 This class represents an entire Sudoku board. A Board object has 81 Cell objects.
     
     '''
 class Board:
-  def __init__(self, width, height, display, difficulty):  
+  def __init__(self, width, height, display, difficulty): 
   #Constructor for the Board class.  
   #screen is a window from PyGame.  
   #difficulty is a variable to indicate if the user chose easy, medium, or hard.  
@@ -373,7 +362,8 @@ class Board:
     self.height = height
     self.display = display
     self.difficulty = difficulty
-    # TODO: set difficulty in UI (0 = easy, 1 = medium, 2 = hard)
+    self.board = generate_sudoku(9, self.difficulty)
+    self.cells = [[Cell(self.board[i][j], i, j, self.display) for j in range(9)] for i in range(9)]
     
    
   def draw(self,display):
@@ -383,44 +373,49 @@ class Board:
   # FROM TICTACTOE
     #this is the bold 3x3
     # draw horizontal lines
-    for i in range(0, 4):
-        pygame.draw.line(
-            display,
-            'white',
-            (0, i * 200),
-            (WIDTH, i * 200),
-            9
-        )
-    # draw vertical lines 
-    for j in range(0, 4):
-        pygame.draw.line(
-            display,
-            "white",
-            (j * 200, 0),
-            (j * 200, 599.4),
-            9
-            #line(surface, color, start_pos, end_pos, width=1) -> Rect
-        )
+    # for i in range(0, 4):
+    #     pygame.draw.line(
+    #         display,
+    #         'white',
+    #         (0, i * 200),
+    #         (WIDTH, i * 200),
+    #         9
+    #     )
+    # # draw vertical lines 
+    # for j in range(0, 4):
+    #     pygame.draw.line(
+    #         display,
+    #         "white",
+    #         (j * 200, 0),
+    #         (j * 200, 599.4),
+    #         9
+    #         #line(surface, color, start_pos, end_pos, width=1) -> Rect
+    #     )
     #this is the 9x9
     # draw horizontal lines
-    for i in range(1, 10):
-        pygame.draw.line(
-            display,
-            'white',
-            (0, i * 66.6),
-            (WIDTH, i * 66.6),
-            1
-        )
-    # draw vertical lines
-    for j in range(1, 10):
-        pygame.draw.line(
-            display,
-            'white',
-            (j * 66.6, 0),
-            (j * 66.6, 599.4),
-            1
-            )
-            
+    # for i in range(1, 10):
+    #     pygame.draw.line(
+    #         display,
+    #         'white',
+    #         (0, i * 66.6),
+    #         (WIDTH, i * 66.6),
+    #         1
+    #     )
+    # # draw vertical lines
+    # for j in range(1, 10):
+    #     pygame.draw.line(
+    #         display,
+    #         'white',
+    #         (j * 66.6, 0),
+    #         (j * 66.6, 599.4),
+    #         1
+    #         )
+    
+    # draw the cells
+    for i in range(9):
+            for j in range(9):
+                self.cells[i][j].draw()
+
      # Initialize buttons
     # Initialize text first
     button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
@@ -521,10 +516,7 @@ class Board:
     #Finds an empty cell and returns its row and col as a tuple (x, y).  
     pass
    
-#   Did this quick, haven't tested yet -dylan
+#   this isn't correct
   def check_board(self):  
-    if SudokuGenerator.get_board() == SudokuGenerator.get_solution_board():
-        return True
-    else: 
-        return False
+    pass
 

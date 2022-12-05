@@ -4,6 +4,7 @@ import pygame
 import sys
 from sudoku_generator import Board
 from sudoku_generator import SudokuGenerator
+from sudoku_generator import generate_sudoku
 
 '''When the program starts, it should display a Game Start screen. This will have buttons for the user to choose a 
 difficulty between easy, medium, or hard. '''
@@ -75,15 +76,15 @@ def start_menu(display):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if easy_rectangle.collidepoint(event.pos):
-                    difficulty = 0
+                    difficulty = 30
                     # Checks if mouse is on start button
                     return difficulty # If the mouse is on the start button, we can return to main
                 if medium_rectangle.collidepoint(event.pos):
-                    difficulty = 1
+                    difficulty = 40
                     # Checks if mouse is on start button
                     return difficulty
                 if hard_rectangle.collidepoint(event.pos):
-                    difficulty = 2
+                    difficulty = 50
                     # Checks if mouse is on start button
                     return difficulty
                 elif quit_rectangle.collidepoint(event.pos):
@@ -209,14 +210,12 @@ def main():
     if sys.argv[len(sys.argv) - 1] == '-d':
         def debug_menu():
             func_dict = {
-                'print_board':sudoku_generator.print_board, 'fill_values':sudoku_generator.fill_values, 'remove_cells':sudoku_generator.remove_cells, 'print_solution_board':sudoku_generator.print_solution_board
+                'print_board':sudoku_generator.print_board, 'fill_values':sudoku_generator.fill_values, 'remove_cells':sudoku_generator.remove_cells
                 }
             
             user_input = input('Enter a function to run: ')
             if user_input in ['exit', 'quit']:
                 quit()
-            elif user_input == 'difficulty':
-                sudoku_generator.set_difficulty(int(input('Enter a difficulty: ')))
             else:
                 func_dict[user_input]()
             debug_menu()
@@ -257,7 +256,12 @@ def main():
             print(board.difficulty)
 
             #GAME SCREEN
+            # generate_sudoku(9, difficulty)
             board.draw(display)
+            
+            
+            pygame.display.update()
+
             #END GAME SCREEN
             # end_game_lost(display)
 

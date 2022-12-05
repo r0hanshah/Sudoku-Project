@@ -22,13 +22,15 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-    #   I added the int(), might break something later on -dylan
-      self.row_length = int(row_length)
+      self.row_length = row_length
       self.removed_cells = removed_cells
-    #   Here too -dylan
+    #   I added the int(), might break something later on -dylan
+    #   print(self.row_length)
       self.box_length = int(math.sqrt(self.row_length))
+    #   print(self.box_length)
       self.board = [["0" for i in range(self.row_length)]
                          for j in range(self.row_length)]
+                         
     
     '''
 	Returns a 2D python list of numbers that represents the board
@@ -46,7 +48,6 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    # works
     def print_board(self):
         for i, row in enumerate(self.board):
             for j, col in enumerate(row):
@@ -63,8 +64,8 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    # likely working -dylan
     def valid_in_row(self, row, num):
+        print(f"desired row is {num}")
         if num in self.board[row-1]:
             return False
         return True
@@ -80,8 +81,9 @@ class SudokuGenerator:
 	
 	Return: boolean
     '''
-    #likely working -dylan
+    #KAYLEE BRIGGS DID THIS AND IT MIGHT NOT WORK, NEED TO TRY
     def valid_in_col(self, col, num):
+        print(f"desired col is {num}")
         for i in range(0, 9):
             if num == int(self.board[i][col]):
                 return False       
@@ -105,8 +107,13 @@ class SudokuGenerator:
                 try:
                     if self.board[i + row_start][j + col_start] == num:
                         return False
-                except:
+                except IndexError:
+                    print("Exception occured")
                     continue
+                except:
+                    print("Something else went wrong")
+                    continue
+        
         return True
     
     '''
@@ -119,10 +126,16 @@ class SudokuGenerator:
 
 	Return: boolean
     '''
-    #  likely working -dylan
+    #THERE IS SOMETHING WRONG HERE, NEED TO FIND OUT HOW TO GET ROW START AND COL START VALUES, WHY ARE FUNCTIONS UNDEFINED?
     def is_valid(self, row, col, num):
-        if self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(row, col, num):
-            return True
+        if self.valid_in_row(row, num):
+            print("row valid as hell")
+            if self.valid_in_col(col, num): 
+                print("col vald as hell")
+                if self.valid_in_box(row, col, num):
+                    print("box vald as hell")   
+                    return True
+        return False
 
 
     '''
@@ -135,12 +148,14 @@ class SudokuGenerator:
 
 	Return: None
     '''
+    # finished!
     def fill_box(self, row_start, col_start):
+        box_values = random.sample(range(9), 9)
+        box_values = [x + 1 for x in box_values]
         for i in range(3):
             for j in range(3):
-                shit = random.randint(1, 9)
-                self.board[i + row_start][j + col_start] = shit
-        self.print_board()
+                self.board[row_start + i][col_start + j] = box_values[i * 3 + j]
+        
     
     '''
     Fills the three boxes along the main diagonal of the board
@@ -149,10 +164,11 @@ class SudokuGenerator:
 	Parameters: None
 	Return: None
     '''
-    # this likely generates invalid boxes, look at again -dylan
+    # this might be working, fill box is likely the problem
     def fill_diagonal(self):
         for i in range(0, int(self.row_length), int(self.box_length)):
             self.fill_box(i, i)
+        
 
     '''
     DO NOT CHANGE
@@ -185,9 +201,13 @@ class SudokuGenerator:
                 if row >= self.row_length:
                     return True
         
+        # print('this code is being run')
         for num in range(1, self.row_length + 1):
+            # print(f"num is {num}")
             if self.is_valid(row, col, num):
+                # print("valid as hell")
                 self.board[row][col] = num
+                
                 if self.fill_remaining(row, col + 1):
                     return True
                 self.board[row][col] = 0
@@ -202,7 +222,11 @@ class SudokuGenerator:
     '''
     def fill_values(self):
         self.fill_diagonal()
+        print('Diagonal filled')
+        print(f"box length is {self.box_length}")
         self.fill_remaining(0, self.box_length)
+        print('Remaining filled')
+
 
     '''
     Removes the appropriate number of cells from the board
@@ -245,7 +269,7 @@ def generate_sudoku(size, removed):
 
 #print(generate_sudoku(9, 30))
 
-sudoku = SudokuGenerator(9,0)
+
 #print(print_board(sudoku.get_board()))
 
 '''Cell (Recommended)  
@@ -264,14 +288,15 @@ class Cell:
     #Setter for this cell’s value  
     self.value = value
   
-  def set_sketched_value(self, value):  
+  def set_sketched_value(self, sketched_value):  
     #Setter for this cell’s sketched value
-    self.value = value  
+    self.sketched_value = sketched_value  
   
 #Draws this cell, along with the value inside it.  
 #If this cell has a nonzero value, that value is displayed.    
 #Otherwise, no value is displayed in the cell.  
 #The cell is outlined red if it is currently selected. 
+
 def draw(self):
     text_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
     if self.value != 0:
@@ -285,7 +310,42 @@ def draw(self):
         # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
     #else:
         #pygame.draw.rect(self.screen, BLACK, (self.col * CELL_WIDTH, self.row * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT), 1)
+        ''''''
         
+        # Get the set of keys pressed and check for user input
+        pressed_keys = pygame.key.get_pressed()
+        '''
+        # Insert corresponding value based on user keypresses
+            if pressed_keys[K_1]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_2]:
+               #place value in pressed box
+                pass
+            if pressed_keys[K_3:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_4]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_5]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_6]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_7]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_8]:
+                #place value in pressed box
+                pass
+            if pressed_keys[K_9]:
+                #place value in pressed box
+                pass
+            else:
+                #what happens if they dont press a value 1-9?
+        '''
 
     '''
 Board (Recommended) 
@@ -306,7 +366,7 @@ class Board:
   def draw(self,display):
   #Draws an outline of the Sudoku grid, with bold lines to delineate the 3x3 boxes.  
   #Draws every cell on this board. 
-  # 
+
   # FROM TICTACTOE
     #this is the bold 3x3
     # draw horizontal lines
@@ -398,7 +458,6 @@ class Board:
         pygame.display.update()
     
 
-
   def select(self, row, col): 
   #Marks the cell at (row, col) in the board as the current selected cell.  
   #Once a cell has been selected, the user can edit its value or sketched value.  
@@ -407,7 +466,7 @@ class Board:
   def click(self, x, y):  
   #If a tuple of (x, y) coordinates is within the displayed board, this function returns a tuple of the (row, col) of the cell which was clicked. Otherwise, this function returns None.  
     if x < 0 or x > self.width or y < 0 or y > self.height:
-        return None
+       return None
     row = y // 50
     col = x // 50
     return (row, col)
@@ -428,7 +487,6 @@ class Board:
     self.board[row][col].draw(self.display)
     
     
-   
   def reset_to_original(self):
   #Reset all cells in the board to their original values (0 if cleared, otherwise the corresponding digit). 
     pass
@@ -452,3 +510,10 @@ class Board:
   def check_board(self):  
     #Check whether the Sudoku board is solved correctly. 
     pass 
+
+
+
+""" 
+sudoku = SudokuGenerator(9,0)
+sudoku.fill_values()
+sudoku.print_board() """

@@ -11,12 +11,13 @@ difficulty between easy, medium, or hard. '''
 
 HEIGHT = 800
 WIDTH = 600
-display = pygame.display.set_mode((WIDTH,HEIGHT))
+
 sudoku_generator = SudokuGenerator(9,0)
 
 def start_menu(display):
     start_title_font = pygame.font.Font("OptimusPrinceps.ttf", 100)
     button_font = pygame.font.Font("OptimusPrinceps.ttf", 50)
+    
 
     # Color background
     display.fill("black")
@@ -81,17 +82,7 @@ def start_menu(display):
                     sys.exit()
         pygame.display.update()
 
-    # Create caption with font
-    pygame.display.set_caption("Sudoku")
-    font = pygame.font.Font('OptimusPrinceps.ttf',55) 
 
-
-    #suduko_text = font.render(f'Sudoku:', True, 'white')
-
-    # Updates window with new background
-    pygame.display.update() 
-    #Menu Title "sudoku"
-    #display.blit(suduko_text, (200, 150))
 
 def end_game_lost(display):
     end_title_font = pygame.font.Font("OptimusPrinceps.ttf", 100)
@@ -143,7 +134,7 @@ def end_game_win(display):
     exit_surface = pygame.Surface((exit_text.get_size()[0]+ 20, exit_text.get_size()[1]+20))
     exit_surface.fill("black")
     exit_surface.blit(exit_text, (10, 10))
-    exit_rectangle = exit_surface.get_rect(center = (300, 600))
+    exit_rectangle = exit_surface.get_rect(center = (22, 600))
     display.blit(exit_text, exit_rectangle)
  
     while True:
@@ -154,7 +145,7 @@ def end_game_win(display):
                 if exit_rectangle.collidepoint(event.pos): 
                     sys.exit()
         pygame.display.update()
-
+#Old Button Class
 class Button:
     def __init__(self, x_cord, y_cord, image, text_input):
         self.image = image
@@ -222,13 +213,16 @@ def main():
         print('Debugging')
         print('=====================')
         debug_menu()
+        
 
         
     # actual program (not debugging)
     else:
-        pygame.init()
         
+        pygame.init()
+        display = pygame.display.set_mode((WIDTH,HEIGHT))
         running = True
+        pygame.display.set_caption("Sudoku")
         
         #creating easy button
         #button = Button(100, 100, None, "Easy")

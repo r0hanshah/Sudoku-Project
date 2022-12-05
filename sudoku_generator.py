@@ -53,7 +53,7 @@ class SudokuGenerator:
             for j, col in enumerate(row):
                 print(self.board [i][j], end = " ")
             print()
-
+        
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
     If num is already in the specified row, return False. Otherwise, return True
@@ -65,10 +65,36 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_row(self, row, num):
-        print(f"desired row is {num}")
-        if num in self.board[row-1]:
+        #print(f"desired row is {num}")
+        if num in self.board[row]:
             return False
         return True
+        
+        
+        
+        # print(f'THIS IS THE NUM: {num}')
+        # selected_row = self.board[row-1].copy()
+        # if num in selected_row:
+        #     print("STUPID ROW")
+        #     return False
+        # print(selected_row)
+        # for _ in range(9):
+        #     try:
+        #         selected_row.remove("0")
+        #     except IndexError:
+        #         print("THIS SUCKS!!")
+        #         pass
+        #     except:
+        #         continue
+        
+        # print(selected_row)
+        # print(self.board[row-1])
+        # if len(selected_row) != len(set(selected_row)):
+        #     print("DUPLICATE")
+        #     return False
+        # print("GOOD ROW")
+        # return True
+        
 
 
     '''
@@ -83,7 +109,7 @@ class SudokuGenerator:
     '''
     #KAYLEE BRIGGS DID THIS AND IT MIGHT NOT WORK, NEED TO TRY
     def valid_in_col(self, col, num):
-        print(f"desired col is {num}")
+        # print(f"desired col is {num}")
         for i in range(0, 9):
             if num == int(self.board[i][col]):
                 return False       
@@ -102,17 +128,21 @@ class SudokuGenerator:
 	Return: boolean
     '''
     def valid_in_box(self, row_start, col_start, num):
+        # for i in range(3):
+        #     for j in range(3):
+        #         if self.board[i + row_start][j + col_start] == num:
+        #             return False
+
+        box = []
         for i in range(3):
             for j in range(3):
-                try:
-                    if self.board[i + row_start][j + col_start] == num:
-                        return False
-                except IndexError:
-                    print("Exception occured")
-                    continue
-                except:
-                    print("Something else went wrong")
-                    continue
+                box.append(self.board[i + row_start][j + col_start])
+        print(box)
+        print(num)
+        # sets can only have unique values
+        if num in box:
+            return False
+        
         
         return True
     
@@ -129,11 +159,15 @@ class SudokuGenerator:
     #THERE IS SOMETHING WRONG HERE, NEED TO FIND OUT HOW TO GET ROW START AND COL START VALUES, WHY ARE FUNCTIONS UNDEFINED?
     def is_valid(self, row, col, num):
         if self.valid_in_row(row, num):
-            print("row valid as hell")
+            # print("row valid as hell")
             if self.valid_in_col(col, num): 
                 print("col vald as hell")
+                if col % 3 != 0:
+                    col = col - col % 3
+                if row % 3 != 0:
+                    row = row - row % 3
                 if self.valid_in_box(row, col, num):
-                    print("box vald as hell")   
+                    # print("box vald as hell")   
                     return True
         return False
 
@@ -201,13 +235,11 @@ class SudokuGenerator:
                 if row >= self.row_length:
                     return True
         
-        # print('this code is being run')
         for num in range(1, self.row_length + 1):
             # print(f"num is {num}")
             if self.is_valid(row, col, num):
                 # print("valid as hell")
                 self.board[row][col] = num
-                
                 if self.fill_remaining(row, col + 1):
                     return True
                 self.board[row][col] = 0
@@ -223,7 +255,7 @@ class SudokuGenerator:
     def fill_values(self):
         self.fill_diagonal()
         print('Diagonal filled')
-        print(f"box length is {self.box_length}")
+        # print(f"box length is {self.box_length}")
         self.fill_remaining(0, self.box_length)
         print('Remaining filled')
 
@@ -460,7 +492,8 @@ class Board:
 
   def select(self, row, col): 
   #Marks the cell at (row, col) in the board as the current selected cell.  
-  #Once a cell has been selected, the user can edit its value or sketched value.  
+  #Once a cell has been selected, the user can edit its value or sketched value. 
+    
     pass
    
   def click(self, x, y):  
@@ -513,9 +546,10 @@ class Board:
 
 
 
-""" 
-sudoku = SudokuGenerator(9,0)
-sudoku.fill_values()
-sudoku.print_board() """
 
-test = True
+sudoku = SudokuGenerator(9,0)
+sudoku.print_board()
+sudoku.fill_values()
+sudoku.print_board() 
+
+

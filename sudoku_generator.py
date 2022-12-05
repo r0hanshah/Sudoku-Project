@@ -1,6 +1,7 @@
 import math,random
 import pygame
 import sys
+import copy
 
 HEIGHT = 800
 WIDTH = 600
@@ -22,12 +23,13 @@ class SudokuGenerator:
 	None
     '''
     def __init__(self, row_length, removed_cells):
-      self.row_length = row_length
-      self.removed_cells = removed_cells
+        self.row_length = row_length
+        self.removed_cells = removed_cells
     #   I added the int(), might break something later on -dylan
-      self.box_length = int(math.sqrt(self.row_length))
-      self.board = [["0" for i in range(self.row_length)]
+        self.box_length = int(math.sqrt(self.row_length))
+        self.board = [["0" for i in range(self.row_length)]
                          for j in range(self.row_length)]
+        self.solution_board = copy.deepcopy(self.board)
                          
     
     '''
@@ -48,10 +50,15 @@ class SudokuGenerator:
     '''
     def print_board(self):
         for i, row in enumerate(self.board):
-            for j, col in enumerate(row):
+            for j,col in enumerate(row):
                 print(self.board [i][j], end = " ")
             print()
         
+    def print_solution_board(self):
+        for i, row in enumerate(self.solution_board):
+            for j,col in enumerate(row):
+                print(self.solution_board [i][j], end = " ")
+            print()
     '''
 	Determines if num is contained in the specified row (horizontal) of the board
     If num is already in the specified row, return False. Otherwise, return True
@@ -209,7 +216,6 @@ class SudokuGenerator:
     def fill_values(self):
         self.fill_diagonal()
         print('Diagonal filled')
-        # print(f"box length is {self.box_length}")
         self.fill_remaining(0, self.box_length)
         print('Remaining filled')
 
@@ -227,8 +233,27 @@ class SudokuGenerator:
 	Return: None
     '''
     def remove_cells(self):
-        # TODO
-        pass
+        self.solution_board = copy.deepcopy(self.board)
+        print(f'Current difficulty: {Board.difficulty}')
+        
+        if Board.difficulty == 0:
+            amount_to_remove = 30
+        elif Board.difficulty == 1:
+            amount_to_remove = 40
+        elif Board.difficulty == 2:
+            amount_to_remove = 50
+        while amount_to_remove > 0:
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
+            if self.board[row][col] != 0:
+                self.board[row][col] = 0
+                amount_to_remove -= 1
+        
+    
+    # this is temporary for debugging
+    def set_difficulty(self, difficulty):
+        Board.difficulty = difficulty
+
 
 '''
 DO NOT CHANGE
@@ -347,6 +372,7 @@ class Board:
     self.height = height
     self.display = display
     self.difficulty = difficulty
+    # TODO: set difficulty in UI (0 = easy, 1 = medium, 2 = hard)
     
    
   def draw(self,display):
@@ -497,13 +523,4 @@ class Board:
   def check_board(self):  
     #Check whether the Sudoku board is solved correctly. 
     pass 
-
-
-
-
-sudoku = SudokuGenerator(9,0)
-sudoku.print_board()
-sudoku.fill_values()
-sudoku.print_board() 
-
 

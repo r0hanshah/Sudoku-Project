@@ -36,9 +36,9 @@ def start_menu(display):
     quit_text = button_font.render("Quit", 0, "white")
 
     # Initialize button background color and text
-    start_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
-    start_surface.fill("black")
-    start_surface.blit(easy_text, (10, 10))
+    easy_surface = pygame.Surface((easy_text.get_size()[0] + 20, easy_text.get_size()[1] + 20))
+    easy_surface.fill("black")
+    easy_surface.blit(easy_text, (10, 10))
     medium_surface = pygame.Surface((medium_text.get_size()[0]+ 20, medium_text.get_size()[1]+20))
     medium_surface.fill("black")
     medium_surface.blit(medium_text, (10, 10))
@@ -50,7 +50,7 @@ def start_menu(display):
     quit_surface.blit(quit_text, (10, 10))
 
     # Initialize button rectangle
-    start_rectangle = start_surface.get_rect(
+    easy_rectangle = easy_surface.get_rect(
         center=(WIDTH // 2, HEIGHT // 2 -50))
 
     medium_rectangle = medium_surface.get_rect(
@@ -64,7 +64,7 @@ def start_menu(display):
         center=(WIDTH // 2, HEIGHT // 2 + 250))
 
     # Draw buttons
-    display.blit(start_surface, start_rectangle)
+    display.blit(easy_surface, easy_rectangle)
     display.blit(medium_surface, medium_rectangle)
     display.blit(hard_surface, hard_rectangle)
     display.blit(quit_surface, quit_rectangle)
@@ -74,9 +74,18 @@ def start_menu(display):
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_rectangle.collidepoint(event.pos):
+                if easy_rectangle.collidepoint(event.pos):
+                    difficulty = 0
                     # Checks if mouse is on start button
-                    return  # If the mouse is on the start button, we can return to main
+                    return difficulty # If the mouse is on the start button, we can return to main
+                if medium_rectangle.collidepoint(event.pos):
+                    difficulty = 1
+                    # Checks if mouse is on start button
+                    return difficulty
+                if hard_rectangle.collidepoint(event.pos):
+                    difficulty = 2
+                    # Checks if mouse is on start button
+                    return difficulty
                 elif quit_rectangle.collidepoint(event.pos):
                     # If the mouse is on the quit button, exit the program
                     sys.exit()
@@ -111,6 +120,7 @@ def end_game_lost(display):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if restart_rectangle.collidepoint(event.pos):
+                    
                     # Checks if mouse is on start button
                     return  # If the mouse is on the reset button, we can return to main add code to actually do restart
                 
@@ -199,12 +209,14 @@ def main():
     if sys.argv[len(sys.argv) - 1] == '-d':
         def debug_menu():
             func_dict = {
-                'print_board':sudoku_generator.print_board, 'fill_values':sudoku_generator.fill_values
+                'print_board':sudoku_generator.print_board, 'fill_values':sudoku_generator.fill_values, 'remove_cells':sudoku_generator.remove_cells, 'print_solution_board':sudoku_generator.print_solution_board
                 }
             
             user_input = input('Enter a function to run: ')
             if user_input in ['exit', 'quit']:
                 quit()
+            elif user_input == 'difficulty':
+                sudoku_generator.set_difficulty(int(input('Enter a difficulty: ')))
             else:
                 func_dict[user_input]()
             debug_menu()
@@ -239,11 +251,15 @@ def main():
 
                 #display.fill("black")
                 #pygame.display.update()
-            #start_menu(display)
-            board = Board(WIDTH, HEIGHT, display, "easy")
+            difficulty = start_menu(display)
+            board = Board(WIDTH, HEIGHT, display, difficulty)
             display.fill("black")
-            #board.draw(display)
-            end_game_lost(display)
+            print(board.difficulty)
+
+            #GAME SCREEN
+            board.draw(display)
+            #END GAME SCREEN
+            # end_game_lost(display)
 
             #pygame.display.update()
         

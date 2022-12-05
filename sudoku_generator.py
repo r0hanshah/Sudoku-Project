@@ -41,6 +41,8 @@ class SudokuGenerator:
     def get_board(self):
         return self.board
 
+    def get_solution_board(self):
+        return self.solution_board
     '''
 	Displays the board to the console
     This is not strictly required, but it may be useful for debugging purposes
@@ -234,7 +236,6 @@ class SudokuGenerator:
     '''
     def remove_cells(self):
         self.solution_board = copy.deepcopy(self.board)
-        print(f'Current difficulty: {Board.difficulty}')
         
         if Board.difficulty == 0:
             amount_to_remove = 30
@@ -520,7 +521,10 @@ class Board:
     #Finds an empty cell and returns its row and col as a tuple (x, y).  
     pass
    
+#   Did this quick, haven't tested yet -dylan
   def check_board(self):  
-    #Check whether the Sudoku board is solved correctly. 
-    pass 
+    if SudokuGenerator.get_board() == SudokuGenerator.get_solution_board():
+        return True
+    else: 
+        return False
 

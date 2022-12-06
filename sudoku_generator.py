@@ -288,8 +288,8 @@ class Cell:
 #The cell is outlined red if it is currently selected. 
 
     def draw(self):
-        if self.selected:
-            pygame.draw.rect(self.display, ("red"), (self.col * 50, self.row * 50, 50, 50), 3)
+        if self.selected and self.value == 0:
+            pygame.draw.rect(self.display, ("red"), (self.col * 66, self.row * 66, 66, 66), 5)
         else: #GRID
             # pygame.draw.rect(self.display, ("white"), (self.col * 75, self.row * 65, 65, 65), 1)
             
@@ -307,12 +307,12 @@ class Cell:
             #NUMBERS ON SCREEN
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
             text = font.render(str(self.value), True, ("white"))
-            self.display.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+            self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
         
         if self.sketched_value != 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 15)
             text = font.render(str(self.sketched_value), True, ("white"))
-            self.display.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+            self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
             
             # text = font.render(str(self.value), True, BLACK)
             # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
@@ -380,24 +380,24 @@ class Board:
   # FROM TICTACTOE
     #this is the bold 3x3
     # draw horizontal lines
-    # for i in range(0, 4):
-    #     pygame.draw.line(
-    #         display,
-    #         'white',
-    #         (0, i * 200),
-    #         (WIDTH, i * 200),
-    #         9
-    #     )
-    # # draw vertical lines 
-    # for j in range(0, 4):
-    #     pygame.draw.line(
-    #         display,
-    #         "white",
-    #         (j * 200, 0),
-    #         (j * 200, 599.4),
-    #         9
-    #         #line(surface, color, start_pos, end_pos, width=1) -> Rect
-    #     )
+    for i in range(0, 4):
+        pygame.draw.line(
+             display,
+             'white',
+             (0, i * 200),
+             (WIDTH, i * 200),
+            9
+         )
+    #draw vertical lines 
+    for j in range(0, 4):
+         pygame.draw.line(
+             display,
+             "white",
+             (j * 200, 0),
+             (j * 200, 599.4),
+             9
+             #line(surface, color, start_pos, end_pos, width=1) -> Rect
+         )
     #this is the 9x9
     # draw horizontal lines
     # for i in range(1, 10):
@@ -420,8 +420,8 @@ class Board:
     
     # draw the cells
     for i in range(9):
-            for j in range(9):
-                self.cells[i][j].draw()
+        for j in range(9):
+            self.cells[i][j].draw()
 
      # Initialize buttons
     # Initialize text first
@@ -455,8 +455,14 @@ class Board:
   def place_number(self, value):
   #Sets the value of the current selected cell equal to user entered value.  
   #Called when the user presses the Enter key.  
-    self.board[row][col] = value
-    self.board[row][col].draw(self.display)
+    for lists in self.cells:
+        for cell in lists:
+            if cell.selected:
+                cell.value = value
+                cell.selected = False
+                cell.sketched_value = 0
+                return
+
     
     
   def reset_to_original(self):

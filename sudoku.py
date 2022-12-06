@@ -157,7 +157,7 @@ def end_game_win(display):
                     sys.exit()
         pygame.display.update()
 #Old Button Class
-class Button:
+""" class Button:
     def __init__(self, x_cord, y_cord, image, text_input):
         self.image = image
         self.x_cord = x_cord
@@ -203,7 +203,7 @@ class Button:
                 
 
         display.blit(self.text, self.text_rect) #^ this might do the same thing
-        
+         """
 # Run the program
 def main():
     # debugging stuff
@@ -246,24 +246,19 @@ def main():
         
         # Updates window with new background
             pygame.display.update() 
-            #
-
-                #display.fill("black")
-                #pygame.display.update()
             difficulty = start_menu(display)
             board = Board(WIDTH, HEIGHT, display, difficulty)
             display.fill("black")
-            print(board.difficulty)
-
             #GAME SCREEN
             # generate_sudoku(9, difficulty)
             board.draw(display)
+            # print("Finished board drawing")
             button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
             reset_text = button_font.render("Reset", 0, "white")
             restart_text = button_font.render("Restart", 0, "white")
             exit_text = button_font.render("Exit", 0, "white")
 
- # Initialize button background color and text
+            # Initialize button background color and text
             reset_surface = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
             reset_surface.fill("black")
             reset_surface.blit(reset_text, (10, 10))
@@ -314,6 +309,15 @@ def main():
                         if clicked:
                             board.select(clicked[0], clicked[1])
                             board.draw(display)
+
+                            #CAUSING ISSUE BOARD NOT BEING PRINTED
+                            # if event.type == pygame.KEYDOWN:
+                            #     if pygame.K_KP0 <= event.key <= pygame.K_KP9:
+                            #         print(event.key)
+                            #         board.sketch(event.key)
+                            # if event.type == pygame.K_RETURN:
+                                
+                            #     board.place_number()
                 pygame.display.update()
 
 

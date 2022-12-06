@@ -271,6 +271,7 @@ class Cell:
         self.display = display
         self.selected = False
         self.sketched_value = 0 
+        self.original_value = value
        
     
   
@@ -304,6 +305,8 @@ class Cell:
                     rect = pygame.Rect(i, j, block_size, block_size)
                     pygame.draw.rect(self.display, ("white"), rect, 2)
 
+        if self.sketched_value == 0 and self.value == 0:
+            pygame.draw.rect(self.display, ("black"), (self.col * 66 + 20, self.row * 66 + 20, 45, 45))
 
         if self.value != 0:
             #NUMBERS ON SCREEN
@@ -314,7 +317,10 @@ class Cell:
         if self.sketched_value != 0 and self.value == 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 35)
             text = font.render(str(self.sketched_value), True, ("green"))
+            # create a filled black box behind the sketched value to make it more visible
+            pygame.draw.rect(self.display, ("black"), (self.col * 64 + 20, self.row * 64 + 20, 45, 45))
             self.display.blit(text, (self.col * 64 + 20, self.row * 64 + 20))
+
 
         if self.selected == False:
             pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 3)
@@ -438,15 +444,15 @@ class Board:
   #Once a cell has been selected, the user can edit its value or sketched value. 
     for lists in self.cells:
         for cell in lists:
-            if cell.selected == True:
+            if cell.selected == True and row >= 0 and row <= 8 and col >= 0 and col <= 8:
                 cell.selected = False
                 self.cells[row][col].selected = True
-            elif cell.selected == False:
+            elif cell.selected == False and row >= 0 and row <= 8 and col >= 0 and col <= 8:
                 self.cells[row][col].selected = True
                 cell.selected = False
              
-                
-    self.cells[row][col].selected = True
+    if row >= 0 and row <= 8 and col >= 0 and col <= 8:
+        self.cells[row][col].selected = True
     
    
   def click(self, x, y):  
@@ -473,8 +479,7 @@ class Board:
                 if cell.value == 0:
                     cell.sketched_value = value
                     cell.selected = False
-                    print(cell.selected)
-                    print("deez nuts")
+                    
                     cell.value = 0
                     return 
     
@@ -494,7 +499,21 @@ class Board:
     
   def reset_to_original(self):
   #Reset all cells in the board to their original values (0 if cleared, otherwise the corresponding digit). 
-    pass
+    for lists in self.cells:
+        for cell in lists:
+            if cell.original_value != 0:
+                cell.value = cell.original_value
+                cell.sketched_value = 0
+                print("FART")
+                cell.selected = False
+                return
+            else:
+                cell.value = 0
+                cell.sketched_value = 0
+                print("FART")
+                cell.selected = False
+                return
+                
    
   def is_full(self):
     #Returns a Boolean value indicating whether the board is full or not.  
@@ -502,6 +521,7 @@ class Board:
         for j in range(9):
             if self.board[i][j] == 0:
                 return False
+    return True
 
 
   def update_board(self):

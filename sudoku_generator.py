@@ -270,7 +270,7 @@ class Cell:
         self.col = col
         self.display = display
         self.selected = False
-        self.sketched_value = 0 
+        self.sketched_value = None
         self.original_value = value
        
     
@@ -314,7 +314,7 @@ class Cell:
             text = font.render(str(self.value), True, ("white"))
             self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
 
-        if self.sketched_value != 0 and self.value == 0:
+        if self.sketched_value != None and self.value == 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 35)
             text = font.render(str(self.sketched_value), True, ("green"))
             # create a filled black box behind the sketched value to make it more visible
@@ -324,6 +324,13 @@ class Cell:
 
         if self.selected == False:
             pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 3)
+        if self.sketched_value == None:
+            pass
+        if self.sketched_value == self.value:
+            pygame.draw.rect(self.display, ("black"), (self.col * 64 + 20, self.row * 64 + 20, 45, 45))
+            font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
+            text = font.render(str(self.value), True, ("white"))
+            self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
             
             
             # text = font.render(str(self.value), True, BLACK)
@@ -478,6 +485,7 @@ class Board:
             if cell.selected:
                 if cell.value == 0:
                     cell.sketched_value = value
+                    print(cell.sketched_value)
                     cell.selected = False
                     
                     cell.value = 0
@@ -492,10 +500,12 @@ class Board:
             if cell.selected:
                 cell.value = value
                 cell.selected = False
+                print(cell.value)
                 cell.sketched_value = 0
                 return
 
     
+
     
   def reset_to_original(self):
   #Reset all cells in the board to their original values (0 if cleared, otherwise the corresponding digit). 
@@ -530,6 +540,7 @@ class Board:
    
   def find_empty(self):
     #Finds an empty cell and returns its row and col as a tuple (x, y).  
+    #If there are no empty cells, returns None.
     pass
    
 #   this isn't correct

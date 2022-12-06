@@ -383,39 +383,80 @@ def main():
 
                             # KEYS NOT BEING REGISTERED
                     if event.type == pygame.KEYDOWN:
-                        print("Hello")
+                        print("Key PRessed")
                         if pygame.K_1 <= event.key <= pygame.K_9:
                             if event.key == pygame.K_1:
                                 board.sketch(1)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_2:
                                 board.sketch(2)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_3:
                                 board.sketch(3)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_4:
                                 board.sketch(4)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_5:
                                 board.sketch(5)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_6:
                                 board.sketch(6)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_7:
                                 board.sketch(7)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_8:
                                 board.sketch(8)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
                             elif event.key == pygame.K_9:
                                 board.sketch(9)
                                 board.draw(display)
+                                if event.type == pygame.K_RETURN:
+                                    print("Pressed Return")
+                                    board.place_number()
+                        if event.key == pygame.K_RETURN:
+                            print("Pressed Return")
+                            for lists in board.cells:
+                                for cell in lists:
+                                    if cell.selected:
+                                        board.place_number(cell.sketched_value)
+                                        board.draw(display)
                 
                     if event.type == pygame.K_RETURN:
-                        print("Pressed Return")
-                        board.place_number()
+                        print("Pressed Resturn")
+                        for lists in board.cells:
+                            for cell in lists:
+                                if cell.selected:
+                                    print(cell.sketched_value)
+                                    board.place_number(cell.sketched_value)
+                                    
+                            
+                        board.draw(display)
                 pygame.display.update()
 
 

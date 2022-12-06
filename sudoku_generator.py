@@ -289,19 +289,26 @@ class Cell:
 
     def draw(self):
         if self.selected:
-            pygame.draw.rect(self.display, ("red"), (self.col * 100, self.row * 100, 100, 100), 3)
+            pygame.draw.rect(self.display, ("red"), (self.col * 50, self.row * 50, 50, 50), 3)
         else: #GRID
             # pygame.draw.rect(self.display, ("white"), (self.col * 75, self.row * 65, 65, 65), 1)
             
-            rectangle = pygame.Rect(self.col * 50, self.row * 50, 50, 50)
-            pygame.draw.rect(self.display, ("white"), rectangle,  2)
+            #changed from 50 to 60
+            #rectangle = pygame.Rect(self.col * 50, self.row * 50, 50, 50)
+            #pygame.draw.rect(self.display, ("white"), rectangle,  2)
+
+            block_size = 600//9
+            for i in range(0, 600 - block_size, block_size):
+                for j in range(0, 600 - block_size, block_size):
+                    rect = pygame.Rect(i, j, block_size, block_size)
+                    pygame.draw.rect(self.display, ("white"), rect, 2)
            
-            
         if self.value != 0:
             #NUMBERS ON SCREEN
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
             text = font.render(str(self.value), True, ("white"))
             self.display.blit(text, (self.col * 50 + 15, self.row * 50 + 15))
+        
         if self.sketched_value != 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 15)
             text = font.render(str(self.sketched_value), True, ("white"))
@@ -418,66 +425,22 @@ class Board:
 
      # Initialize buttons
     # Initialize text first
-    button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
-    reset_text = button_font.render("Reset", 0, "white")
-    restart_text = button_font.render("Restart", 0, "white")
-    exit_text = button_font.render("Exit", 0, "white")
-
- # Initialize button background color and text
-    reset_surface = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
-    reset_surface.fill("black")
-    reset_surface.blit(reset_text, (10, 10))
-    
-    restart_surface = pygame.Surface((restart_text.get_size()[0]+ 20, restart_text.get_size()[1]+20))
-    restart_surface.fill("black")
-    restart_surface.blit(restart_text, (10, 10))
-
-    exit_surface = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
-    exit_surface.fill("black")
-    exit_surface.blit(exit_text, (10, 10))
-
-    # Initialize button rectangle, positioning 
-    reset_rectangle = reset_surface.get_rect(
-        center=(99.9, 700)
-    )
-    restart_rectangle = restart_surface.get_rect(
-        center = (299.7, 710)
-    )
-    exit_rectangle = exit_surface.get_rect(
-        center = (499.5, 700)
-    )
-
-    # Draw buttons
-    display.blit(restart_text, restart_rectangle)
-    display.blit(reset_surface, reset_rectangle)
-    display.blit(exit_surface, exit_rectangle)
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if reset_rectangle.collidepoint(event.pos):
-                    # Checks if mouse is on start button
-                    return  # If the mouse is on the reset button, we can return to main
-                elif exit_rectangle.collidepoint(event.pos):
-                    # If the mouse is on the exit button, exit the program
-                    sys.exit()
-        pygame.display.update()
     
 
   def select(self, row, col): 
   #Marks the cell at (row, col) in the board as the current selected cell.  
   #Once a cell has been selected, the user can edit its value or sketched value. 
+    self.cells[row][col].selected = True
     
-    pass
+    
    
   def click(self, x, y):  
-  #If a tuple of (x, y) coordinates is within the displayed board, this function returns a tuple of the (row, col) of the cell which was clicked. Otherwise, this function returns None.  
+  #If a tuple of (x, y) coordinates is within the displayed board, this function returns a tuple of the 
+  # (row, col) of the cell which was clicked. Otherwise, this function returns None.
     if x < 0 or x > self.width or y < 0 or y > self.height:
        return None
-    row = y // 50
-    col = x // 50
+    row = int(y // 66.67)
+    col = int(x // 66.67)
     return (row, col)
    
   def clear(self):  
@@ -520,3 +483,4 @@ class Board:
   def check_board(self):  
     pass
 
+    

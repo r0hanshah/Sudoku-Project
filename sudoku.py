@@ -258,9 +258,64 @@ def main():
             #GAME SCREEN
             # generate_sudoku(9, difficulty)
             board.draw(display)
+            button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
+            reset_text = button_font.render("Reset", 0, "white")
+            restart_text = button_font.render("Restart", 0, "white")
+            exit_text = button_font.render("Exit", 0, "white")
+
+ # Initialize button background color and text
+            reset_surface = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
+            reset_surface.fill("black")
+            reset_surface.blit(reset_text, (10, 10))
             
-            
-            pygame.display.update()
+            restart_surface = pygame.Surface((restart_text.get_size()[0]+ 20, restart_text.get_size()[1]+20))
+            restart_surface.fill("black")
+            restart_surface.blit(restart_text, (10, 10))
+
+            exit_surface = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
+            exit_surface.fill("black")
+            exit_surface.blit(exit_text, (10, 10))
+
+            # Initialize button rectangle, positioning 
+            reset_rectangle = reset_surface.get_rect(
+                center=(99.9, 700)
+            )
+            restart_rectangle = restart_surface.get_rect(
+                center = (299.7, 710)
+            )
+            exit_rectangle = exit_surface.get_rect(
+                center = (499.5, 700)
+            )
+
+            # Draw buttons
+            display.blit(restart_text, restart_rectangle)
+            display.blit(reset_surface, reset_rectangle)
+            display.blit(exit_surface, exit_rectangle)
+
+    
+            # print("Hello")
+            game = True
+            while game:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if reset_rectangle.collidepoint(event.pos):
+                            # Checks if mouse is on start button
+                            return  # If the mouse is on the reset button, we can return to main
+                        elif exit_rectangle.collidepoint(event.pos):
+                            # If the mouse is on the exit button, exit the program
+                            sys.exit()
+                    if event.type == pygame.QUIT:
+                        game = False
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        clicked = board.click(pos[0], pos[1])
+                        if clicked:
+                            board.select(clicked[0], clicked[1])
+                            board.draw(display)
+                pygame.display.update()
+
 
             #END GAME SCREEN
             # end_game_lost(display)
@@ -269,11 +324,6 @@ def main():
         
         
         
-'''Create a Sudoku Board 
-Difficulty  Number of empty cells  
-easy   30  
-medium  40  
-hard   50 '''
 
 '''Make "Game Won!" Screen with exit button if all cells are completed correctly"'''
 

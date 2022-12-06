@@ -12,6 +12,10 @@ difficulty between easy, medium, or hard. '''
 HEIGHT = 800
 WIDTH = 600
 
+#something for kaylee briggs might not be necessary
+x = 0
+y = 0
+
 sudoku_generator = SudokuGenerator(9,0)
 
 def start_menu(display):
@@ -202,7 +206,18 @@ class Button:
                 
 
         display.blit(self.text, self.text_rect) #^ this might do the same thing
-        
+
+
+#THIS IS SOMETHING FOR KAYLEE BRIGGS
+#its supposed to get positions but is super silly idk global variable silliness
+def get_cord(pos):
+    global x
+    x = pos[0] // dif
+    global y
+    y = pos[1] // dif
+#END OF THING FOR KAYLEE BRIGGS
+
+
 # Run the program
 def main():
     # debugging stuff
@@ -243,11 +258,10 @@ def main():
                 if event.type == pygame.QUIT:
                     running = False
             #menu = text.get
-            
-        
+
+
         # Updates window with new background
-            pygame.display.update() 
-            #
+            pygame.display.update()
 
                 #display.fill("black")
                 #pygame.display.update()
@@ -258,11 +272,68 @@ def main():
 
             #GAME SCREEN
             board.draw(display)
+
+            #KAYLEE BRIGGS
+            #INPUT VALUES FROM 2D LIST
+            board = get_board()
+
+
+            for i in range(9):
+                for j in range (9):
+                    numbers_text = button_font.render(str(board[i][j]), 1, 'white')
+                    display.blit(numbers_text, (i * 66.6 + 15, j * 66.6 + 15))
+                    pygame.display.update()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    position = pygame.mouse.get_pos()
+                    get_cord(position)
+
+                if event.type == pygame.K_1:
+                    val = 1
+                    number = button_font.render(str(val), 1, 'white')
+                    #global x
+                    #global y
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_2:
+                    val = 2
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_3:
+                    val = 3
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_4:
+                    val = 4
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_5:
+                    val = 5
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_6:
+                    val = 6
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_7:
+                    val = 7
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_8:
+                    val = 8
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+                if event.key == pygame.K_9:
+                    val = 9
+                    number = button_font.render(str(val), 1, 'white')
+                    display.blit(number, (x * 66.6 + 15, y * 66.6 + 15))
+               #END OF KAYLEE BRIGGS
+
             #END GAME SCREEN
             # end_game_lost(display)
 
-            #pygame.display.update()
-        
+            pygame.display.update()
+
         
         
 '''Create a Sudoku Board 
@@ -271,7 +342,7 @@ easy   30
 medium  40  
 hard   50 '''
 
-'''Make "Game Won!" Screen with exit button if all cells are completed correctly"'''
+'''Make "Game Won!" Screen with exit button if all cells are completed correctly'''
 
 '''Make "Game Over :(" Screen with Restart button if the board is full but not solved correctly'''
 

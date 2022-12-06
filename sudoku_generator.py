@@ -288,8 +288,9 @@ class Cell:
 #The cell is outlined red if it is currently selected. 
 
     def draw(self):
-        if self.selected == True and self.value == 0 and self.sketched_value == 0:
-            pygame.draw.rect(self.display, ("red"), (self.col * 66, self.row * 66, 66, 66), 5)
+        if self.selected == True and self.value == 0:
+            pygame.draw.rect(self.display, ("red"), (self.col * 66, self.row * 66, 66, 66), 3)
+        
         else: #GRID
             # pygame.draw.rect(self.display, ("white"), (self.col * 75, self.row * 65, 65, 65), 1)
             
@@ -302,18 +303,22 @@ class Cell:
                 for j in range(0, 600 - block_size, block_size):
                     rect = pygame.Rect(i, j, block_size, block_size)
                     pygame.draw.rect(self.display, ("white"), rect, 2)
-           
+
+
         if self.value != 0:
             #NUMBERS ON SCREEN
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
             text = font.render(str(self.value), True, ("white"))
             self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
-        
-        if self.sketched_value != 0:
+
+        if self.sketched_value != 0 and self.value == 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 35)
             text = font.render(str(self.sketched_value), True, ("green"))
             self.display.blit(text, (self.col * 64 + 20, self.row * 64 + 20))
-            pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 5)
+
+        if self.selected == False:
+            pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 3)
+            
             
             # text = font.render(str(self.value), True, BLACK)
             # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
@@ -465,7 +470,13 @@ class Board:
     for lists in self.cells:
         for cell in lists:
             if cell.selected:
-                cell.sketched_value = value
+                if cell.value == 0:
+                    cell.sketched_value = value
+                    cell.selected = False
+                    print(cell.selected)
+                    print("deez nuts")
+                    cell.value = 0
+                    return 
     
    
   def place_number(self, value):

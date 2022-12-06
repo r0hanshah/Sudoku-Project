@@ -288,7 +288,7 @@ class Cell:
 #The cell is outlined red if it is currently selected. 
 
     def draw(self):
-        if self.selected and self.value == 0:
+        if self.selected == True and self.value == 0 and self.sketched_value == 0:
             pygame.draw.rect(self.display, ("red"), (self.col * 66, self.row * 66, 66, 66), 5)
         else: #GRID
             # pygame.draw.rect(self.display, ("white"), (self.col * 75, self.row * 65, 65, 65), 1)
@@ -310,9 +310,10 @@ class Cell:
             self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
         
         if self.sketched_value != 0:
-            font = pygame.font.SysFont('OptimusPrinceps.ttf', 15)
-            text = font.render(str(self.sketched_value), True, ("white"))
-            self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
+            font = pygame.font.SysFont('OptimusPrinceps.ttf', 35)
+            text = font.render(str(self.sketched_value), True, ("green"))
+            self.display.blit(text, (self.col * 64 + 20, self.row * 64 + 20))
+            pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 5)
             
             # text = font.render(str(self.value), True, BLACK)
             # self.screen.blit(text, (self.col * CELL_WIDTH + 10, self.row * CELL_HEIGHT + 10))
@@ -430,8 +431,17 @@ class Board:
   def select(self, row, col): 
   #Marks the cell at (row, col) in the board as the current selected cell.  
   #Once a cell has been selected, the user can edit its value or sketched value. 
+    for lists in self.cells:
+        for cell in lists:
+            if cell.selected == True:
+                cell.selected = False
+                self.cells[row][col].selected = True
+            elif cell.selected == False:
+                self.cells[row][col].selected = True
+                cell.selected = False
+             
+                
     self.cells[row][col].selected = True
-    
     
    
   def click(self, x, y):  
@@ -444,13 +454,19 @@ class Board:
     return (row, col)
    
   def clear(self):  
-  #Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  values  and  sketched  value  that  are filled by themselves.  
+  #Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  
+  # values  and  sketched  value  that  are filled by themselves.  
+    
     pass
    
   def sketch(self, value):
   #Sets the sketched value of the current selected cell equal to user entered value.  
-  #It will be displayed at the top left corner of the cell using the draw() function. 
-    pass
+  #It will be displayed at the top left corner of the cell using the draw() function.
+    for lists in self.cells:
+        for cell in lists:
+            if cell.selected:
+                cell.sketched_value = value
+    
    
   def place_number(self, value):
   #Sets the value of the current selected cell equal to user entered value.  

@@ -181,27 +181,20 @@ def end_game_win(display):
                 self.button_clicked = True
             if pygame.mouse.get_pressed()[0] == 0:
                 self.button_clicked = False 
-
-
         display.blit(self.image, (self.rect.x, self.rect.y))
-
     #draws text on button on screen (hope this works)
     def draw_text(self,display):
         #display.blit(self.text, (self.rect.x, self.rect.y))
         mouse = pygame.mouse.get_pos()
-        
         if self.text_rect.collidepoint(mouse):
             #left mouse click
             if pygame.mouse.get_pressed()[0] == 1 and self.button_clicked == False:
                 self.button_clicked = True
                 display.fill('black')
-
                 return True
             #no mouse click
         if pygame.mouse.get_pressed()[0] == 0:
             self.button_clicked = False 
-                
-
         display.blit(self.text, self.text_rect) #^ this might do the same thing
          """
 # Run the program
@@ -306,18 +299,47 @@ def main():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         pos = pygame.mouse.get_pos()
                         clicked = board.click(pos[0], pos[1])
+                        #WHEN CELL IS RED/SELECTED
                         if clicked:
                             board.select(clicked[0], clicked[1])
                             board.draw(display)
+                            
 
-                            #CAUSING ISSUE BOARD NOT BEING PRINTED
-                            # if event.type == pygame.KEYDOWN:
-                            #     if pygame.K_KP0 <= event.key <= pygame.K_KP9:
-                            #         print(event.key)
-                            #         board.sketch(event.key)
-                            # if event.type == pygame.K_RETURN:
-                                
-                            #     board.place_number()
+                            # KEYS NOT BEING REGISTERED
+                    if event.type == pygame.KEYDOWN:
+                        print("Hello")
+                        if pygame.K_1 <= event.key <= pygame.K_9:
+                            if event.key == pygame.K_1:
+                                board.sketch(1)
+                                board.draw(display)
+                            elif event.key == pygame.K_2:
+                                board.sketch(2)
+                                board.draw(display)
+                            elif event.key == pygame.K_3:
+                                board.sketch(3)
+                                board.draw(display)
+                            elif event.key == pygame.K_4:
+                                board.sketch(4)
+                                board.draw(display)
+                            elif event.key == pygame.K_5:
+                                board.sketch(5)
+                                board.draw(display)
+                            elif event.key == pygame.K_6:
+                                board.sketch(6)
+                                board.draw(display)
+                            elif event.key == pygame.K_7:
+                                board.sketch(7)
+                                board.draw(display)
+                            elif event.key == pygame.K_8:
+                                board.sketch(8)
+                                board.draw(display)
+                            elif event.key == pygame.K_9:
+                                board.sketch(9)
+                                board.draw(display)
+                
+                    if event.type == pygame.K_RETURN:
+                        print("Pressed Return")
+                        board.place_number()
                 pygame.display.update()
 
 

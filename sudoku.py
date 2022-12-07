@@ -329,7 +329,45 @@ def main():
                               # If the mouse is on the reset button, we can return to main
                         if restart_rectangle.collidepoint(event.pos):
                             # If the mouse is on the restart button, restart the game
+                            difficulty = start_menu(display)
                             board = Board(WIDTH, HEIGHT, display, difficulty)
+                            display.fill("black")
+                            board.draw(display)
+                            button_font = pygame.font.Font("OptimusPrinceps.ttf", 30)
+                            reset_text = button_font.render("Reset", 0, "white")
+                            restart_text = button_font.render("Restart", 0, "white")
+                            exit_text = button_font.render("Exit", 0, "white")
+
+                            # Initialize button background color and text
+                            reset_surface = pygame.Surface((reset_text.get_size()[0] + 20, reset_text.get_size()[1] + 20))
+                            reset_surface.fill("black")
+                            reset_surface.blit(reset_text, (10, 10))
+                            
+                            restart_surface = pygame.Surface((restart_text.get_size()[0]+ 20, restart_text.get_size()[1]+20))
+                            restart_surface.fill("black")
+                            restart_surface.blit(restart_text, (10, 10))
+
+                            exit_surface = pygame.Surface((exit_text.get_size()[0] + 20, exit_text.get_size()[1] + 20))
+                            exit_surface.fill("black")
+                            exit_surface.blit(exit_text, (10, 10))
+
+                            # Initialize button rectangle, positioning 
+                            reset_rectangle = reset_surface.get_rect(
+                                center=(99.9, 700)
+                            )
+                            restart_rectangle = restart_surface.get_rect(
+                                center = (299.7, 710)
+                            )
+                            exit_rectangle = exit_surface.get_rect(
+                                center = (499.5, 700)
+                            )
+                            # Draw buttons
+                            display.blit(restart_text, restart_rectangle)
+                            display.blit(reset_surface, reset_rectangle)
+                            display.blit(exit_surface, exit_rectangle)
+                            pygame.display.update()
+
+                            """ board = Board(WIDTH, HEIGHT, display, difficulty)
                             display.fill("black")
                             
                             board.draw(display)
@@ -366,7 +404,9 @@ def main():
                             display.blit(reset_surface, reset_rectangle)
                             display.blit(exit_surface, exit_rectangle)
                             pygame.display.update()
-                            break
+                            break """
+                            # difficulty = start_menu(display)
+
                         if exit_rectangle.collidepoint(event.pos):
                             # If the mouse is on the exit button, exit the program
                             sys.exit()

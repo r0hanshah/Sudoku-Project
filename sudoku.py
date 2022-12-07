@@ -75,7 +75,7 @@ def start_menu(display):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if easy_rectangle.collidepoint(event.pos):
-                    difficulty = 1
+                    difficulty = 30
                     # Checks if mouse is on start button
                     return difficulty # If the mouse is on the start button, we can return to main
                 if medium_rectangle.collidepoint(event.pos):

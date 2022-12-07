@@ -304,23 +304,24 @@ class Board:
                 return False
     
     # checks the columns
-    # print('checking columns')
-    # for i in range(9):
-    #     for j in range(8):
-    #         print(self.board[j][i])
-    #         if self.board[j][i] == 0:
-    #             return False
-    #         if self.board[j][i] in self.board[j+1:][i]:
-    #             return False
+    print('checking columns')
+    for i in range(9):
+        for j in range(8):
+            print(self.board[j][i])
+            if self.board[j][i] == 0:
+                return False
+            if self.board[j][i] in self.board[j+1:][i]:
+                return False
     
-    # # checks the boxes
-    # print('checking boxes')
-    # for i in range(3):
-    #     for j in range(2):
-    #         print(self.board[i][j])
-    #         if self.board[i][j] == 0:
-    #             return False
-    #         if self.board[i][j] in self.board[i][j+1:]:
-    #             return False
+    
+    # checks the boxes
+    print('checking boxes')
+    for i in range(3):
+        for j in range(2):
+            print(self.board[i][j])
+            if self.board[i][j] == 0:
+                return False
+            if self.board[i][j] in self.board[i][j+1:]:
+                return False
     return True
     

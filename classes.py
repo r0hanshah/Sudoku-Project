@@ -64,7 +64,6 @@ class Cell:
         #This should clear the cell if the value is 0
         if self.sketched_value == 0 and self.value == 0:
             pygame.draw.rect(self.display, ("black"), (self.col * 66 + 20, self.row * 66 + 20, 45, 45))
-            print("SOMETHING")
         # 
         if self.value != 0 and self.value != None:
             #NUMBERS ON SCREEN
@@ -83,7 +82,6 @@ class Cell:
 
         if self.selected == False:
             pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 3)
-            # print("OK")
         if self.sketched_value == None:
             pass
         # conditions for when the cell is reset
@@ -207,7 +205,6 @@ class Board:
                 if cell.submitted == False:
                     cell.value = value
                     cell.selected = False
-                    print(cell.value)
                     cell.sketched_value = 0
                     cell.submitted = True 
                     if cell.value == 0:
@@ -226,25 +223,21 @@ class Board:
                 cell.value = 0
                 cell.sketched_value = 0
                 cell.selected = False
-                print("DEEZ nuts")
                 return
             else:
                 cell.value = 0
                 cell.sketched_value = 0
                 cell.selected = False
-                print("THOSE NUTS")
                 return """
 
     for lists in self.cells:
         for cell in lists:
             #this runs for pre filled in cells
-            print(cell.original_value)
             if cell.sketched_value != None:
                 cell.value = cell.original_value
                 cell.sketched_value = None
                 cell.reset = True
                 cell.submitted = False
-                print("hi michael")
             if cell.original_value != 0:
                 cell.value = cell.original_value
                 cell.sketched_value = None
@@ -252,7 +245,6 @@ class Board:
                 cell.reset = True
                 cell.submitted = False
             
-                print("hi rohan")
                 # return
             #this runs for cells that are not pre filled in/ empty
             else:
@@ -261,7 +253,6 @@ class Board:
                 cell.selected = False
                 cell.reset = True
                 cell.submitted = False
-                print("HIIIIIII")
                 # return
                 
    
@@ -294,31 +285,28 @@ class Board:
     #Check whether the Sudoku board is solved correctly by confirming row, column, and boxes are all valid
     #Returns True if the board is solved, False otherwise.
     # checks the rows
-    print('checking rows')
     for i in range(9):
-        for j in range(8):
-            print(self.board[i][j])
+        for j in range(9):
+         
             if self.board[i][j] == 0:
                 return False
             if self.board[i][j] in self.board[i][j+1:]:
                 return False
     
     # checks the columns
-    print('checking columns')
     for i in range(9):
         for j in range(8):
-            print(self.board[j][i])
+           
             if self.board[j][i] == 0:
                 return False
-            if self.board[j][i] in self.board[j+1:][i]:
+            if self.board[j][i] == self.board[j+1][i]:
                 return False
     
     
     # checks the boxes
-    print('checking boxes')
     for i in range(3):
-        for j in range(2):
-            print(self.board[i][j])
+        for j in range(3):
+            
             if self.board[i][j] == 0:
                 return False
             if self.board[i][j] in self.board[i][j+1:]:

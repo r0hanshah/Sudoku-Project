@@ -211,7 +211,7 @@ class SudokuGenerator:
         # print('Diagonal filled')
         self.fill_remaining(0, self.box_length)
         # print('Remaining filled')
-        self.print_board()
+        # self.print_board()
 
 
     '''

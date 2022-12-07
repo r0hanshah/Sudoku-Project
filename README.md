@@ -1,5 +1,9 @@
 # Sudoku Soul's Like
 
+Inspired by the Dark Souls Games
+Used their font and took inspiration from their "YOU DIED" screen
+
+
 Sudoku Board with 3 varying difficulties
 
 Use your mouse to select the box you want to type in.

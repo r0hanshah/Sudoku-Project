@@ -154,47 +154,6 @@ def end_game_win(display):
                 if exit_rectangle.collidepoint(event.pos): 
                     sys.exit()
         pygame.display.update()
-#Old Button Class
-""" class Button:
-    def __init__(self, x_cord, y_cord, image, text_input):
-        self.image = image
-        self.x_cord = x_cord
-        self.y_cord = y_cord
-        self.text_input = text_input
-        self.text = pygame.font.Font("OptimusPrinceps.ttf", 40).render(self.text_input, True, "white")
-        if image == None:
-            self.image = self.text
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x_cord,y_cord)
-        self.button_clicked = False
-        self.text_rect = self.text.get_rect(center=(self.x_cord, self.y_cord))
-    #draws image on button on screen (might need to run display through this idk)
-    def draw_image(self):
-        #gets position of mouse
-        mouse = pygame.mouse.get_pos() 
-        if self.rect.collidepoint(mouse):
-            #left mouse click
-            if pygame.mouseget_pressed()[0] == 1 and self.button_clicked == False:
-                print('clicked')
-                self.button_clicked = True
-            if pygame.mouse.get_pressed()[0] == 0:
-                self.button_clicked = False 
-        display.blit(self.image, (self.rect.x, self.rect.y))
-    #draws text on button on screen (hope this works)
-    def draw_text(self,display):
-        #display.blit(self.text, (self.rect.x, self.rect.y))
-        mouse = pygame.mouse.get_pos()
-        if self.text_rect.collidepoint(mouse):
-            #left mouse click
-            if pygame.mouse.get_pressed()[0] == 1 and self.button_clicked == False:
-                self.button_clicked = True
-                display.fill('black')
-                return True
-            #no mouse click
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.button_clicked = False 
-        display.blit(self.text, self.text_rect) #^ this might do the same thing
-         """
 # Run the program
 def main():
     # debugging stuff

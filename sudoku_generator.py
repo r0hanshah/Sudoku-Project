@@ -314,7 +314,7 @@ class Cell:
             text = font.render(str(self.value), True, ("white"))
             self.display.blit(text, (self.col * 66 + 22, self.row * 66 + 22))
 
-        if self.sketched_value != None and self.value == 0:
+        if self.sketched_value != None and self.value == 0 and self.sketched_value != 0:
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 35)
             text = font.render(str(self.sketched_value), True, ("green"))
             # create a filled black box behind the sketched value to make it more visible
@@ -326,7 +326,7 @@ class Cell:
             pygame.draw.rect(self.display, ("white"), (self.col * 66, self.row * 66, 66, 66), 3)
         if self.sketched_value == None:
             pass
-        if self.sketched_value == self.value:
+        if self.sketched_value == self.value and self.value != 0:
             pygame.draw.rect(self.display, ("black"), (self.col * 64 + 20, self.row * 64 + 20, 45, 45))
             font = pygame.font.SysFont('OptimusPrinceps.ttf', 45)
             text = font.render(str(self.value), True, ("white"))
@@ -472,10 +472,12 @@ class Board:
     return (row, col)
    
   def clear(self):  
-  #Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  
-  # values  and  sketched  value  that  are filled by themselves.  
+  #Clears  the  value  cell.  Note  that  the  user  can  only  remove  the  cell  values  and  sketched  value  that  are filled by themselves.  
+    for lists in self.cells:
+        for cell in lists:
+            if cell.selected:
+                cell.value = 0
     
-    pass
    
   def sketch(self, value):
   #Sets the sketched value of the current selected cell equal to user entered value.  
@@ -514,13 +516,11 @@ class Board:
             if cell.original_value != 0:
                 cell.value = cell.original_value
                 cell.sketched_value = 0
-                print("FART")
                 cell.selected = False
                 return
             else:
                 cell.value = 0
                 cell.sketched_value = 0
-                print("FART")
                 cell.selected = False
                 return
                 
@@ -536,15 +536,29 @@ class Board:
 
   def update_board(self):
     #Updates the underlying 2D board with the values in all cells. 
-    pass
+    for i in range(9):
+        for j in range(9):
+            self.board[i][j] = self.cells[i][j].value
    
   def find_empty(self):
     #Finds an empty cell and returns its row and col as a tuple (x, y).  
     #If there are no empty cells, returns None.
-    pass
+    for i in range(9):
+        for j in range(9):
+            if self.board[i][j] == 0:
+                return (i, j)
+    return None
    
 #   this isn't correct
   def check_board(self):  
-    pass
+    #Checks if the board is valid.
+    #Returns True if the board is valid, False otherwise.
+    for i in range(9):
+        for j in range(9):
+            if self.board[i][j] != 0:
+                if self.is_valid(i, j, self.board[i][j]):
+                    return True
+                else:
+                    return False
 
     

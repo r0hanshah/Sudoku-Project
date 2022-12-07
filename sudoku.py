@@ -440,23 +440,17 @@ def main():
                                     print("Pressed Return")
                                     board.place_number()
                         if event.key == pygame.K_RETURN:
-                            print("Pressed Return")
+                            print("PresseSSd Return")
                             for lists in board.cells:
                                 for cell in lists:
                                     if cell.selected:
                                         board.place_number(cell.sketched_value)
                                         board.draw(display)
+                                        board.update_board()
                 
-                    if event.type == pygame.K_RETURN:
-                        print("Pressed Resturn")
-                        for lists in board.cells:
-                            for cell in lists:
-                                if cell.selected:
-                                    print(cell.sketched_value)
-                                    board.place_number(cell.sketched_value)
-                                    
+                  
                             
-                        board.draw(display)
+                                  
                 pygame.display.update()
 
 
